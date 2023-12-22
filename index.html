@@ -1,0 +1,28 @@
+<script>
+async function generateSHA256HashFromURL() {
+  // Get the current URL
+  const url = new URL(window.location.href);
+
+  // Extract the keyword from the URL path
+  const keyword = url.pathname.split('/')[2];
+
+  if (keyword) {
+    try {
+      // Generate SHA-256 hash using the browser's SubtleCrypto API
+      const msgBuffer = new TextEncoder().encode(keyword);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+      // Print the SHA-256 hash
+      console.log("SHA-256 hash of the keyword:", hashHex);
+    } catch (error) {
+      console.error("Error generating hash:", error);
+    }
+  } else {
+    console.log("Keyword not found in the URL.");
+  }
+}
+
+generateSHA256HashFromURL();
+</script>
